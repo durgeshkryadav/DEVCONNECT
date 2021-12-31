@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { check, validationResult } = require("express-validator/check");
+const gravatar = require('gravatar');
+const bcrypt = require('bcryptjs');
+const { check, validationResult } = require("express-validator");
+
 const User = require('../../models/User');
 
 
@@ -9,7 +12,7 @@ const User = require('../../models/User');
 // @desc    Register User
 // @access  Public
 router.post(
-  "/",
+  '/',
   [check("name", "Name is required please").not().isEmpty(),
   check('email', 'please include a valid email').isEmail(),
   check('password', 'Please enter a password with more than 12 charactors').isLength({
@@ -25,14 +28,44 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
     }
 
-    const {name, email, password } = req.body;
+    const { name, email, password } = req.body;
     
     try{
-    let user = await User.findOne({ email });
+          let user = await User.findOne({ email });
+          if(user)
+          {
+              res.status(400).json({errors: [{ msg: 'User Already exists' }] });
+          }
+          const avatar = gravatar.url(email,{
+            s: '200',
+            r: 'pg',
+            d: 'mm'
+          })
 
-    if(user){
-        res.status(400).json({errors: [{ msg: 'User Already exists' }]});
+          user = new User({
+            name,
+            email,
+            avatar,
+            password
+          });
+
+          const salt = await bcrypt.genSalt(10);
+
+          user.password = await bcrypt.hash(password,salt);
+          await user.save();
+
+          res.send('User registred');
     }
+    catch(err){
+            console.error(err.message);
+            res.status(500).send('Server Error Dubara Try Kariye Please');
+    }    
+  }
+);
+
+module.exports = router;
+
+
     // See if user exists
     
     // Get users gravatar
@@ -40,19 +73,3 @@ router.post(
     // Encrypt password
 
     // Return jsonwebtoken
-
-    res.send("User route");
-
-
-    }catch(err){
-        console.log(err.message);
-        res.status(500).send('Server Error Dubara Try Kariye Please');
-    } 
-
-
-
-    
-  }
-);
-
-module.exports = router;
