@@ -1,7 +1,7 @@
 {
-    "mongoURI":"mongodb+srv://dgsh12345:dgsh12345@devconnector.onmos.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    "jwtSecret": "mysecrettoken",
-    "githubClientId": "4eeaabe387b406f8ff35",
-    "githubSecret": "a3da929e3da43812188ddd67ba25ddaffcee5375"
+    "mongoURI":"AVAILABLE ON PRIVATE REPO LIGHT ON OF",
+    "jwtSecret": "AVAILABLE ON PRIVATE REPO LIGHT ON OF",
+    "githubClientId": "AVAILABLE ON PRIVATE REPO LIGHT ON OF",
+    "githubSecret": "AVAILABLE ON PRIVATE REPO LIGHT ON OF"
 
 }
